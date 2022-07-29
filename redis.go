@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-redis/redis/v8"
+	"io/ioutil"
 	"time"
 )
 
@@ -20,16 +21,19 @@ type Redis struct {
 }
 
 type RedisConfig struct {
-	Address  string
-	Port     string
-	Password string
+	Address    string
+	CACertFile string
+	Port       string
+	Password   string
 }
 
 func NewRedis(config RedisConfig) (Redis, error) {
 	var tlsConfig *tls.Config
 	if config.Address != localAddress {
-		// TODO: Read in file
-		var caCert []byte
+		caCert, err := ioutil.ReadFile(config.CACertFile)
+		if err != nil {
+			return Redis{}, err
+		}
 
 		caCertPool := x509.NewCertPool()
 		caCertPool.AppendCertsFromPEM(caCert)
@@ -48,18 +52,20 @@ func NewRedis(config RedisConfig) (Redis, error) {
 
 	ctx := context.Background()
 
-	if err := client.Ping(ctx).Err(); err != nil {
-		return Redis{}, err
-	}
-
-	return Redis{
+	r := Redis{
 		client: client,
 		ctx:    ctx,
-	}, nil
+	}
+
+	return r, r.Health()
 }
 
 func (r Redis) Delete(key string) error {
 	return r.client.Del(r.ctx, key).Err()
+}
+
+func (r Redis) Health() error {
+	return r.client.Ping(r.ctx).Err()
 }
 
 func (r Redis) Get(key string) (string, error) {
