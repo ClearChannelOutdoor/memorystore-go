@@ -22,10 +22,10 @@ import memorystore_go "github.com/clearchanneloutdoor/memorystore-go"
 
 func main() {
 	config := memorystore_go.RedisConfig {
-	    Address: "Insert Host Address Here",
-		CACertFile: "Insert CA Certificate File Path Here",
-		Port: "Insert Port Here",
-		Password: "Insert Auth String Here",
+	    Address: "localhost",
+		CACertFile: "file/to/cacert",
+		Port: "6379",
+		Password: "password",
     }
 	
 	redis, err := memorystore_go.NewRedis(config)
