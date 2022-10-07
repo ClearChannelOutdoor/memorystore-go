@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-redis/redis/v8"
+	"github.com/go-redis/redismock/v8"
 	"io/ioutil"
 	"time"
 )
@@ -49,6 +50,19 @@ func NewRedis(config RedisConfig) (Redis, error) {
 		Password:  config.Password,
 		TLSConfig: tlsConfig,
 	})
+
+	ctx := context.Background()
+
+	r := Redis{
+		client: client,
+		ctx:    ctx,
+	}
+
+	return r, r.Health()
+}
+
+func NewRedisMock() (Redis, error) {
+	_, mock := redismock.NewClientMock()
 
 	ctx := context.Background()
 
