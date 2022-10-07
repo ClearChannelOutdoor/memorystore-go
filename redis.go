@@ -17,7 +17,7 @@ const (
 )
 
 type Redis struct {
-	client *redis.Client
+	client RedisClient
 	ctx    context.Context
 }
 
@@ -62,7 +62,7 @@ func NewRedis(config RedisConfig) (Redis, error) {
 }
 
 func NewRedisMock() (Redis, error) {
-	_, mock := redismock.NewClientMock()
+	client, _ := redismock.NewClientMock()
 
 	ctx := context.Background()
 
