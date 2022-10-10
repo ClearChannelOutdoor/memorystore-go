@@ -1,16 +1,16 @@
-package main
+package memorystore_tests
 
 import (
-	"fmt"
+	// "fmt"
 	memorystore_go "github.com/clearchanneloutdoor/memorystore-go"
 	// "sync"
+	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
-func main() {
-	fmt.Println("Start")
+func TestRedisMockCreate(t *testing.T) {
 
 	client, _ := memorystore_go.NewRedisMock()
 
-	client.Health()
-	fmt.Println("Done")
+	assert.Nil(t, client.Health())
 }
