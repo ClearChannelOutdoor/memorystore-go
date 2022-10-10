@@ -5,6 +5,7 @@ import (
 	memorystore_go "github.com/clearchanneloutdoor/memorystore-go"
 	// "sync"
 	"encoding/json"
+	"errors"
 	"github.com/go-redis/redismock/v8"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -42,13 +43,13 @@ func TestRedisMockWrite(t *testing.T) {
 	if encodingError != nil {
 		t.Error(encodingError)
 	}
-	mock.ExpectSet("set-key", valueBytes, 10*time.Minute)
+	mock.ExpectSet("set-key", valueBytes, 10*time.Minute).SetErr(errors.New("FAIL"))
 
-	client.Set("set-key", "set-value", 10*time.Minute)
+	err := client.Set("set-key", "set-value", 10*time.Minute)
 
-	//if err == nil || err.Error() != "FAIL" {
-	//	t.Error("Wrong Error Recieved")
-	//}
+	if err == nil || err.Error() != "FAIL" {
+		t.Error("Wrong Error Recieved")
+	}
 
 	if err := mock.ExpectationsWereMet(); err != nil {
 		t.Error(err)
