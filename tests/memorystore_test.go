@@ -1,27 +1,16 @@
 package memorystore_tests
 
 import (
-	// "fmt"
-	memorystore_go "github.com/clearchanneloutdoor/memorystore-go"
-	// "sync"
 	"encoding/json"
 	"errors"
+	memorystore_go "github.com/clearchanneloutdoor/memorystore-go"
 	"github.com/go-redis/redismock/v8"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
 )
 
-type TestData struct {
-	Value string
-}
-
 func TestRedisMockGet(t *testing.T) {
-
-	//var d = TestData{
-	//	Value: "woosh",
-	//}
-
 	db, mock := redismock.NewClientMock()
 
 	client := memorystore_go.NewRedisMock(db)
@@ -32,8 +21,6 @@ func TestRedisMockGet(t *testing.T) {
 
 	assert.Equal(t, value, "")
 	mock.ClearExpect()
-
-	// r.client.Ping(r.ctx).Err()
 }
 
 func TestRedisMockWrite(t *testing.T) {
