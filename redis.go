@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-redis/redis/v8"
-	"github.com/go-redis/redismock/v8"
 	"io/ioutil"
 	"time"
 )
@@ -61,9 +60,7 @@ func NewRedis(config RedisConfig) (Redis, error) {
 	return r, r.Health()
 }
 
-func NewRedisMock() (Redis, error) {
-	client, _ := redismock.NewClientMock()
-
+func NewRedisMock(client *redis.Client) Redis {
 	ctx := context.Background()
 
 	r := Redis{
@@ -71,7 +68,7 @@ func NewRedisMock() (Redis, error) {
 		ctx:    ctx,
 	}
 
-	return r, r.Health()
+	return r
 }
 
 func (r Redis) Delete(key string) error {
