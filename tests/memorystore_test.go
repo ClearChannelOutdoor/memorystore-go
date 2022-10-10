@@ -35,12 +35,30 @@ func TestRedisMockWrite(t *testing.T) {
 	err := client.Set("set-key", "set-value", 10*time.Minute)
 
 	if err == nil || err.Error() != "FAIL" {
-		t.Error("Wrong Error Recieved")
+		t.Error("Wrong Error Received")
 	}
 
 	if err := mock.ExpectationsWereMet(); err != nil {
 		t.Error(err)
 	}
 
+	mock.ClearExpect()
+}
+
+func TestRedisMockDel(t *testing.T) {
+	db, mock := redismock.NewClientMock()
+	client := memorystore_go.NewRedisMock(db)
+
+	mock.ExpectDel("del-key").SetErr(errors.New("FAIL"))
+
+	err := client.Delete("del-key")
+
+	if err == nil || err.Error() != "FAIL" {
+		t.Error("Wrong Error Received")
+	}
+
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Error(err)
+	}
 	mock.ClearExpect()
 }
