@@ -98,3 +98,19 @@ func TestRedisGet(t *testing.T) {
 
 	assert.Equal(t, value, "\"values\"")
 }
+
+func TestRedisDel(t *testing.T) {
+	client, err := memorystore_go.NewRedis(database())
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	delErr := client.Delete(testKey)
+
+	assert.Nil(t, delErr)
+
+	value, _ := client.Get(testKey)
+
+	assert.Equal(t, value, "")
+}
