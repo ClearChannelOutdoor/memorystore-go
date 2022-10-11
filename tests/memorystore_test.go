@@ -32,7 +32,7 @@ func TestRedisMockGet(t *testing.T) {
 
 	value, _ := client.Get("get-key")
 
-	assert.Equal(t, value, "")
+	assert.Equal(t, "", value)
 	mock.ClearExpect()
 }
 
@@ -104,7 +104,7 @@ func TestRedisGet(t *testing.T) {
 		t.Error(jsonErr)
 	}
 
-	assert.Equal(t, data, "values")
+	assert.Equal(t, "values", data)
 }
 
 func TestRedisDel(t *testing.T) {
@@ -120,5 +120,5 @@ func TestRedisDel(t *testing.T) {
 
 	value, _ := client.Get(testKey)
 
-	assert.Equal(t, value, "")
+	assert.Equal(t, "", value)
 }
