@@ -16,7 +16,7 @@ const (
 )
 
 type Redis struct {
-	client *redis.Client
+	client RedisClient
 	ctx    context.Context
 }
 
@@ -58,6 +58,17 @@ func NewRedis(config RedisConfig) (Redis, error) {
 	}
 
 	return r, r.Health()
+}
+
+func NewRedisMock(client *redis.Client) Redis {
+	ctx := context.Background()
+
+	r := Redis{
+		client: client,
+		ctx:    ctx,
+	}
+
+	return r
 }
 
 func (r Redis) Delete(key string) error {
