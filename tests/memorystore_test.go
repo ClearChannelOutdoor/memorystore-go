@@ -6,9 +6,22 @@ import (
 	memorystore_go "github.com/clearchanneloutdoor/memorystore-go"
 	"github.com/go-redis/redismock/v8"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 	"time"
 )
+
+const (
+	testKey = "db_test_key"
+)
+
+func database() memorystore_go.RedisConfig {
+	return memorystore_go.RedisConfig{
+		Address:  os.Getenv("REDIS_ADDRESS"),
+		Port:     os.Getenv("REDIS_PORT"),
+		Password: os.Getenv("REDIS_PASSWORD"),
+	}
+}
 
 func TestRedisMockGet(t *testing.T) {
 	db, mock := redismock.NewClientMock()
@@ -61,4 +74,27 @@ func TestRedisMockDel(t *testing.T) {
 		t.Error(err)
 	}
 	mock.ClearExpect()
+}
+
+func TestRedisSet(t *testing.T) {
+	client, err := memorystore_go.NewRedis(database())
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	setErr := client.Set(testKey, "values", 10*time.Minute)
+	assert.Nil(t, setErr)
+}
+
+func TestRedisGet(t *testing.T) {
+	client, err := memorystore_go.NewRedis(database())
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	value, _ := client.Get(testKey)
+
+	assert.Equal(t, value, "\"values\"")
 }
