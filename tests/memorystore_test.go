@@ -94,9 +94,17 @@ func TestRedisGet(t *testing.T) {
 		t.Error(err)
 	}
 
+	var data string
+
 	value, _ := client.Get(testKey)
 
-	assert.Equal(t, value, "\"values\"")
+	jsonErr := json.Unmarshal([]byte(value), &data)
+
+	if jsonErr != nil {
+		t.Error(jsonErr)
+	}
+
+	assert.Equal(t, data, "values")
 }
 
 func TestRedisDel(t *testing.T) {
