@@ -29,7 +29,7 @@ type RedisConfig struct {
 
 func NewRedis(config RedisConfig) (Redis, error) {
 	var tlsConfig *tls.Config
-	if config.Address != localAddress {
+	if config.Address != localAddress && config.CACertFile != "" {
 		caCert, err := ioutil.ReadFile(config.CACertFile)
 		if err != nil {
 			return Redis{}, err
