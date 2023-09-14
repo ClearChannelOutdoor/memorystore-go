@@ -22,8 +22,8 @@ The `MemoryStore` interface will require Redis and Memcache implementations to l
 ```go
 type MemoryStore interface {
 	Delete(key string) error
-	Health() error
 	Get(key string) (string, error)
+	Health() error
 	IncrByFloat(key string, value float64) error
 	Set(key string, value interface{}, expiration time.Duration) error
 }
