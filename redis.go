@@ -6,9 +6,10 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"io/ioutil"
 	"time"
+
+	"github.com/go-redis/redis/v8"
 )
 
 const (
@@ -81,6 +82,10 @@ func (r Redis) Health() error {
 
 func (r Redis) Get(key string) (string, error) {
 	return r.client.Get(r.ctx, key).Result()
+}
+
+func (r Redis) IncrByFloat(key string, value float64) error {
+	return r.client.IncrByFloat(r.ctx, key, value).Err()
 }
 
 func (r Redis) Set(key string, value interface{}, expiration time.Duration) error {
