@@ -68,6 +68,13 @@ func main() {
 ```go
 value, err := redis.Get("key")
 ```
+### IncrByFloat
+
+```go
+if err := redis.IncrByFloat("key", 1.0); err != nil {
+		// Handle error
+}
+```
 
 ### Set
 
