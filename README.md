@@ -24,6 +24,7 @@ type MemoryStore interface {
 	Delete(key string) error
 	Health() error
 	Get(key string) (string, error)
+	IncrByFloat(key string, value float64) error
 	Set(key string, value interface{}, expiration time.Duration) error
 }
 ```
